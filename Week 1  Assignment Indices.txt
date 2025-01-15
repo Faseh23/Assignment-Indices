@@ -1,0 +1,84 @@
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <limits>
+
+// Function to validate the constraints
+bool isValidInput(const std::vector<int>& nums, int target) {
+    if (nums.size() < 2 || nums.size() > 10000) {
+        std::cout << "Error: The number of elements must be between 2 and 10^4." << std::endl;
+        return false;
+    }
+
+    for (int num : nums) {
+        if (num < -1000000000 || num > 1000000000) {
+            std::cout << "Error: Each number must be between -10^9 and 10^9." << std::endl;
+            return false;
+        }
+    }
+
+    if (target < -1000000000 || target > 1000000000) {
+        std::cout << "Error: Target must be between -10^9 and 10^9." << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+std::vector<int> twoSum(std::vector<int>& nums, int target) {
+    std::unordered_map<int, int> hashMap; // To store the difference and its index
+
+    for (int i = 0; i < nums.size(); ++i) {
+        int complement = target - nums[i]; // Find the complement that makes the sum equal to target
+
+        if (hashMap.find(complement) != hashMap.end()) {
+            return {hashMap[complement], i}; // If complement is found, return the indices
+        }
+
+        hashMap[nums[i]] = i; // Store the current number and its index
+    }
+
+    return {}; // This is just a fallback, but the problem guarantees that a solution exists
+}
+
+int main() {
+    int n, target;
+
+    // Input the length of the array
+    std::cout << "Enter the number of elements in the array: ";
+    std::cin >> n;
+
+    // Check if the number of elements is within the allowed range
+    if (n < 2 || n > 10000) {
+        std::cout << "Error: The number of elements must be between 2 and 10^4." << std::endl;
+        return 1;
+    }
+
+    // Input the array elements
+    std::vector<int> nums(n);
+    std::cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    // Input the target value
+    std::cout << "Enter the target value: ";
+    std::cin >> target;
+
+    // Validate the input
+    if (!isValidInput(nums, target)) {
+        return 1;
+    }
+
+    // Call the twoSum function
+    std::vector<int> result = twoSum(nums, target);
+
+    // Output the result
+    if (!result.empty()) {
+        std::cout << "Output: [" << result[0] << ", " << result[1] << "]" << std::endl;
+    } else {
+        std::cout << "No solution found." << std::endl;
+    }
+
+    return 0;
+}
